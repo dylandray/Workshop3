@@ -23,3 +23,8 @@ def GenerateModel(evaluate=True):
         return model, mse, r2
     
     return model
+
+if __name__ == "__main__":
+    model, mse, r2 = GenerateModel()
+    print(f"Mean Squared Error: {mse}")
+    print(f"R2 Score: {r2}")
