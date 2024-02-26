@@ -19,7 +19,7 @@ def predictKillian():
     data = request.json
     with h5py.File('RFC_Killian.pkl', 'r') as f:
         model_killian = pickle.load(f)
-    prediction = model_louis.predict(data)
+    prediction = model_killian.predict(data)
     return create_response(data, prediction)
 
 def create_response(data, prediction):
