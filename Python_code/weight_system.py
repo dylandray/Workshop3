@@ -16,8 +16,6 @@ df =pd.read_csv("steam.csv", index_col=0)
 # data processing
 df["positive_ratio"] = df["positive_ratings"] / (df["positive_ratings"] + df["negative_ratings"])
 
-
-
 def load_pkl_model(model_path):
     """
     Load a model from a .pkl file
@@ -61,6 +59,7 @@ model_files = [file for file in files if file.endswith((".pkl", ".h5"))]
 weight = []
 
 # Load each model
+models = []
 for model_file in model_files:
     foo = False
     model_path = os.path.join(folder_path, model_file)
@@ -72,7 +71,25 @@ for model_file in model_files:
         model = load_h5_model(model_path)
         foo = False
     # Analyze the model and decide if the weight should be updated or not
-    weight.append(analyze_model(model, foo) * 1000)
+    precision = analyze_model(model, foo)
+    models.append({"model": model, "precision": precision})
+
+# Sort the models by precision (higher precision means better performance)
+models.sort(key=lambda x: x["precision"], reverse=True)
+
+# Update the weights based on the model performance
+weights = []
+for i, model in enumerate(models):
+    weight = model["precision"] * (0.9 ** i)  # Decrease the weight of models based on their position
+    weights.append(weight)
+
+# Normalize the weights to sum up to 1
+total_weight = sum(weights)
+weights = [weight / total_weight for weight in weights]
+
+# Print the weights
+for i, model_file in enumerate(model_files):
+    print(f"Model: {model_file}, Weight: {weights[i]}")
 
 
 #given an order in the way we deal with the models, the weight are the precision of each model
