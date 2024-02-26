@@ -13,6 +13,8 @@ def predict():
     prediction = model_louis.predict(data)
     return create_response(data, prediction)
 
+
+@app.route('/predictKillian', methods=['POST'])
 def predictKillian():
     data = request.json
     with h5py.File('RFC_Killian.pkl', 'r') as f:
@@ -26,3 +28,11 @@ def create_response(data, prediction):
         'prediction': prediction
     }
     return jsonify(response)
+
+@app.route("/predictCharles", methods=["POST"])
+def predictCharles():
+    data = request.json
+    from Charles import Charles_model
+    model_charles = Charles_model()
+    prediction = model_charles.predict(data)
+    return create_response(data, prediction)
