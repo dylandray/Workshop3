@@ -1,0 +1,37 @@
+<!-- templates/home.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product List</title>
+    <script>
+        // Function to load JSON data from the server
+        function loadProducts() {
+    fetch('http://localhost:5000/products')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);  // Log the data to the console
+            const productList = document.getElementById('productList');
+            data.forEach(product => {
+                const listItem = document.createElement('li');
+                listItem.appendChild(document.createTextNode(product.name));
+                productList.appendChild(listItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+    </script>
+</head>
+<body>
+    <h1>Product List</h1>
+    <ul id="productList"></ul>
+
+    <script>
+        // Call the loadProducts function when the page loads
+        window.onload = loadProducts;
+    </script>
+</body>
+</html>
+
